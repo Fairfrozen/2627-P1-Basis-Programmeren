@@ -190,5 +190,12 @@ function moveCars() {
   }
 }
 
+function preload() {
+  car1X = loadSound('car1.mp3');
+  car2X = loadSound('car2.mp3');
+  car3X = loadSound('car3.mp3');
+}
+
+
 function keyPressed() {
 }
