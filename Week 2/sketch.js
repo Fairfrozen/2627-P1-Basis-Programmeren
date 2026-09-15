@@ -131,11 +131,10 @@ function drawGround() {
   noStroke();
   rect(0, groundY, width, height - groundY);
 
-  // Road
   fill(80);
   rect(0, 470, width, 100);
 
-  // Road markings
+
   fill(255);
 
   for (let x = 0; x < width; x += 100) {
@@ -169,8 +168,7 @@ function drawTrafficLight() {
   }
 
   circle(740, 265, 40);
-
-  // GREEN LIGHT
+// GREEN LIGHT
   if (trafficLight === GREEN) {
     fill(0, 255, 0);
   } else {
@@ -207,22 +205,18 @@ function drawCar(x, y, r, g, b) {
 }
 
 function moveCars() {
-  // Full speed when green
+
   if (trafficLight === GREEN) {
     car1X += car1Speed;
     car2X += car2Speed;
     car3X += car3Speed;
   }
 
-  // Half speed when orange
   if (trafficLight === ORANGE) {
     car1X += car1Speed * 0.5;
     car2X += car2Speed * 0.5;
     car3X += car3Speed * 0.5;
   }
-
-  // When RED, nothing is added,
-  // so the cars completely stop.
 
   if (car1X > width + 150) {
     car1X = -150;
