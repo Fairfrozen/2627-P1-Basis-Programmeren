@@ -1,6 +1,6 @@
-let car1X = -150;
-let car2X = -400;
-let car3X = -700;
+let car1X = 100;
+let car2X = 300;
+let car3X = 500;
 
 let carY = 455;
 
@@ -19,10 +19,14 @@ let sunSpeed = 1;
 let trafficLight = 0;
 
 const RED = 0;
-const GREEN = 1;
-const ORANGE = 2;
+const ORANGE = 1;
+const GREEN = 2;
 
 let groundY = 450;
+
+function preload() {
+  carSound = loadSound('dragon-studio-car-honk-386166.mp3');
+}
 
 function setup() {
   createCanvas(800, 600);
@@ -38,9 +42,13 @@ function draw() {
   drawGround();
   drawTrafficLight();
 
+  // Cars
   drawCar(car1X, carY, 200, 30, 30);
   drawCar(car2X, carY, 30, 100, 220);
   drawCar(car3X, carY, 240, 170, 20);
+
+  // Tree in front of the cars
+  drawTree(600, 425, 0.65);
 
   moveSun();
   moveCloud();
@@ -70,6 +78,7 @@ function drawCloud() {
   circle(cloudX + 55, 130, 65);
   circle(cloudX + 85, 145, 50);
   circle(cloudX + 55, 150, 60);
+
   rect(cloudX + 15, 135, 75, 30);
 }
 
@@ -95,6 +104,7 @@ function drawTrees() {
   drawTree(120, 350, 0.8);
   drawTree(650, 420, 1.5);
   drawTree(300, 380, 0.9);
+  drawTree(40, 250, 0.8);
 }
 
 function drawTree(x, y, size) {
@@ -116,14 +126,16 @@ function drawTree(x, y, size) {
 }
 
 function drawGround() {
+  // Grass
   fill(80, 180, 80);
   noStroke();
-
   rect(0, groundY, width, height - groundY);
 
+  // Road
   fill(80);
   rect(0, 470, width, 100);
 
+  // Road markings
   fill(255);
 
   for (let x = 0; x < width; x += 100) {
@@ -132,19 +144,39 @@ function drawGround() {
 }
 
 function drawTrafficLight() {
+  // Pole
   fill(60);
   rect(735, 250, 10, 200);
 
+  // Traffic light box
   fill(40);
   rect(700, 180, 80, 170);
 
-  fill(255, 0, 0);
+  // RED LIGHT
+  if (trafficLight === RED) {
+    fill(255, 0, 0);
+  } else {
+    fill(80);
+  }
+
   circle(740, 215, 40);
 
-  fill(80);
+  // ORANGE LIGHT
+  if (trafficLight === ORANGE) {
+    fill(255, 165, 0);
+  } else {
+    fill(80);
+  }
+
   circle(740, 265, 40);
 
-  fill(80);
+  // GREEN LIGHT
+  if (trafficLight === GREEN) {
+    fill(0, 255, 0);
+  } else {
+    fill(80);
+  }
+
   circle(740, 315, 40);
 }
 
@@ -175,25 +207,42 @@ function drawCar(x, y, r, g, b) {
 }
 
 function moveCars() {
-  car1X += car1Speed;
-  car2X += car2Speed;
-  car3X += car3Speed;
+  // Full speed when green
+  if (trafficLight === GREEN) {
+    car1X += car1Speed;
+    car2X += car2Speed;
+    car3X += car3Speed;
+  }
+
+  // Half speed when orange
+  if (trafficLight === ORANGE) {
+    car1X += car1Speed * 0.5;
+    car2X += car2Speed * 0.5;
+    car3X += car3Speed * 0.5;
+  }
+
+  // When RED, nothing is added,
+  // so the cars completely stop.
 
   if (car1X > width + 150) {
     car1X = -150;
   }
 
   if (car2X > width + 150) {
-    car2X = -300;
+    car2X = -150;
   }
 
   if (car3X > width + 150) {
-    car3X = -500;
+    car3X = -150;
   }
 }
 
 function mousePressed() {
-  if (isCarClicked(car1X, carY) || isCarClicked(car2X, carY) || isCarClicked(car3X, carY)) {
+  if (
+    isCarClicked(car1X, carY) ||
+    isCarClicked(car2X, carY) ||
+    isCarClicked(car3X, carY)
+  ) {
     userStartAudio();
     carSound.play();
   }
@@ -211,10 +260,18 @@ function isCarClicked(x, y) {
   );
 }
 
-function preload() {
-  carSound = loadSound('dragon-studio-car-honk-386166.mp3');
-}
-
-
 function keyPressed() {
+  if (keyCode === ENTER) {
+
+    // RED -> GREEN -> ORANGE -> RED
+    if (trafficLight === RED) {
+      trafficLight = GREEN;
+    } 
+    else if (trafficLight === GREEN) {
+      trafficLight = ORANGE;
+    } 
+    else {
+      trafficLight = RED;
+    }
+  }
 }
