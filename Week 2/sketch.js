@@ -4,6 +4,8 @@ let car3X = -700;
 
 let carY = 455;
 
+let carSound;
+
 let car1Speed = 3;
 let car2Speed = 2;
 let car3Speed = 4;
@@ -190,10 +192,27 @@ function moveCars() {
   }
 }
 
+function mousePressed() {
+  if (isCarClicked(car1X, carY) || isCarClicked(car2X, carY) || isCarClicked(car3X, carY)) {
+    userStartAudio();
+    carSound.play();
+  }
+}
+
+function isCarClicked(x, y) {
+  const carWidth = 140;
+  const carHeight = 70;
+
+  return (
+    mouseX > x &&
+    mouseX < x + carWidth &&
+    mouseY > y &&
+    mouseY < y + carHeight
+  );
+}
+
 function preload() {
-  car1X = loadSound('car1.mp3');
-  car2X = loadSound('car2.mp3');
-  car3X = loadSound('car3.mp3');
+  carSound = loadSound('dragon-studio-car-honk-386166.mp3');
 }
 
 
